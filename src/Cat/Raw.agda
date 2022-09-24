@@ -35,20 +35,34 @@ record LawfulCategory (C : Category) : Set where
            → f ≈ f'
            → g ∘ f ≈ g' ∘ f'
 
-    id-l : {a b : Obj} → (f : a ⇒ b) → id ∘ f ≈ f
-    id-r : {a b : Obj} → (f : a ⇒ b) → f ∘ id ≈ f
+    id-l : {a b : Obj} → {f : a ⇒ b} → id ∘ f ≈ f
+    id-r : {a b : Obj} → {f : a ⇒ b} → f ∘ id ≈ f
     ∘-assoc : {a b c d : Obj}
-            → (h : c ⇒ d)
-            → (g : b ⇒ c)
-            → (f : a ⇒ b)
+            → {h : c ⇒ d}
+            → {g : b ⇒ c}
+            → {f : a ⇒ b}
             → (h ∘ g) ∘ f ≈ h ∘ (g ∘ f)
 
+  ∘-congˡ : {a b c : Obj}
+          → {g g' : b ⇒ c}
+          → {f : a ⇒ b}
+          → g ≈ g'
+          → g ∘ f ≈ g' ∘ f
+  ∘-congˡ g≈ = ∘-cong g≈ (IsEquivalence.refl ≈-equiv)
+
+  ∘-congʳ : {a b c : Obj}
+           → {g : b ⇒ c}
+           → {f f' : a ⇒ b}
+           → f ≈ f'
+           → g ∘ f ≈ g ∘ f'
+  ∘-congʳ = ∘-cong (IsEquivalence.refl ≈-equiv)
+
   ⨟-assoc : {a b c d : Obj}
-          → (f : a ⇒ b)
-          → (g : b ⇒ c)
-          → (h : c ⇒ d)
+          → {f : a ⇒ b}
+          → {g : b ⇒ c}
+          → {h : c ⇒ d}
           → (f ⨟ g) ⨟ h ≈ f ⨟ (g ⨟ h)
-  ⨟-assoc f g h = IsEquivalence.sym ≈-equiv (∘-assoc h g f)
+  ⨟-assoc {f = f} {g} {h} = IsEquivalence.sym ≈-equiv (∘-assoc {h = h} {g} {f})
 
   setoid : {X Y : Obj} → Setoid _ _
   Setoid.Carrier (setoid {X} {Y}) = X ⇒ Y

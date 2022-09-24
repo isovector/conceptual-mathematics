@@ -8,6 +8,7 @@ module _ where
   open LawfulCategory L
 
   record Isomorphism (a b : Obj) : Set where
+    constructor mk-iso
     field
       fwd : a ⇒ b
       bwd : b ⇒ a
@@ -27,35 +28,21 @@ fwd-bwd (id ISO) = id-r L
 bwd-fwd (id ISO) = id-r L
 fwd ((ISO ∘ g) f) = _∘_ C (fwd g) (fwd f)
 bwd ((ISO ∘ g) f) = _∘_ C (bwd f) (bwd g)
-fwd-bwd (_∘_ ISO g f) =
-  begin
-    _∘_ C
-      (_∘_ C (fwd g) (fwd f))
-      (_∘_ C (bwd f) (bwd g))
-  ≈⟨ [∘]∘[∘]→∘[[∘]∘] L ⟩
-    _∘_ C (fwd g) (_∘_ C (_∘_ C (fwd f) (bwd f)) (bwd g))
-  ≈⟨ ∘-congʳ L (∘-congˡ L (fwd-bwd f)) ⟩
-    _∘_ C (fwd g) (_∘_ C (id C) (bwd g))
-  ≈⟨ ∘-congʳ L (id-l L) ⟩
-    _∘_ C (fwd g) (bwd g)
-  ≈⟨ fwd-bwd g ⟩
-    id C
-  ∎
+fwd-bwd (_∘_ ISO g f)
+  = [∘]∘[∘]→∘[[∘]∘] L
+  ▹ (∘-congʳ L ( ∘-congˡ L (fwd-bwd f)
+               ▹ id-l L
+               )
+    )
+  ▹ fwd-bwd g
   where open HomReasoning L
-bwd-fwd (Category._∘_ ISO g f) =
-  begin
-    _∘_ C
-      (_∘_ C (bwd f) (bwd g))
-      (_∘_ C (fwd g) (fwd f))
-  ≈⟨ [∘]∘[∘]→∘[[∘]∘] L ⟩
-    _∘_ C (bwd f) (_∘_ C (_∘_ C (bwd g) (fwd g)) (fwd f))
-  ≈⟨ ∘-congʳ L (∘-congˡ L (bwd-fwd g)) ⟩
-    _∘_ C (bwd f) (_∘_ C (id C) (fwd f))
-  ≈⟨ ∘-congʳ L (id-l L) ⟩
-    _∘_ C (bwd f) (fwd f)
-  ≈⟨ bwd-fwd f ⟩
-    id C
-  ∎
+bwd-fwd (Category._∘_ ISO g f)
+  = [∘]∘[∘]→∘[[∘]∘] L
+  ▹ (∘-congʳ L ( ∘-congˡ L (bwd-fwd g)
+               ▹ id-l L
+               )
+    )
+  ▹ bwd-fwd f
   where open HomReasoning L
 
 open import Data.Unit

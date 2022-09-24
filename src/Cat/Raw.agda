@@ -73,6 +73,9 @@ record LawfulCategory (C : Category) : Set where
     open SetoidR (setoid {A} {B}) public
     open IsEquivalence (≈-equiv {A} {B}) public
 
+    infixr 1 _▹_
+    _▹_ = trans
+
   [∘]∘[∘]→∘[[∘]∘]
     : ∀ {a b c d e : Obj} {f : a ⇒ b} {g : b ⇒ c} {h : c ⇒ d} {i : d ⇒ e}
     → (i ∘ h) ∘ (g ∘ f) ≈ i ∘ ((h ∘ g) ∘ f)

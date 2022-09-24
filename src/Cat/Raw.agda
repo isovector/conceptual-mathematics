@@ -73,3 +73,9 @@ record LawfulCategory (C : Category) : Set where
     open SetoidR (setoid {A} {B}) public
     open IsEquivalence (≈-equiv {A} {B}) public
 
+  [∘]∘[∘]→∘[[∘]∘]
+    : ∀ {a b c d e : Obj} {f : a ⇒ b} {g : b ⇒ c} {h : c ⇒ d} {i : d ⇒ e}
+    → (i ∘ h) ∘ (g ∘ f) ≈ i ∘ ((h ∘ g) ∘ f)
+  [∘]∘[∘]→∘[[∘]∘] = trans ∘-assoc (∘-congʳ (sym ∘-assoc))
+    where open HomReasoning
+

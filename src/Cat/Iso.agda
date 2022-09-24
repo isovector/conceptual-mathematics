@@ -14,16 +14,6 @@ module _ where
       fwd-bwd : fwd ∘ bwd ≈ id
       bwd-fwd : bwd ∘ fwd ≈ id
 
-module _ where
-  open LawfulCategory L
-
-
-  [∘]∘[∘]→∘[[∘]∘]
-    : ∀ {a b c d e : Obj} {f : a ⇒ b} {g : b ⇒ c} {h : c ⇒ d} {i : d ⇒ e}
-    → (i ∘ h) ∘ (g ∘ f) ≈ i ∘ ((h ∘ g) ∘ f)
-  [∘]∘[∘]→∘[[∘]∘] = trans ∘-assoc (∘-congʳ (sym ∘-assoc))
-    where open HomReasoning
-
 open Category
 open LawfulCategory hiding (Obj; id; _∘_; _⇒_)
 open Isomorphism
@@ -42,7 +32,7 @@ fwd-bwd (_∘_ ISO g f) =
     _∘_ C
       (_∘_ C (fwd g) (fwd f))
       (_∘_ C (bwd f) (bwd g))
-  ≈⟨ [∘]∘[∘]→∘[[∘]∘]  ⟩
+  ≈⟨ [∘]∘[∘]→∘[[∘]∘] L ⟩
     _∘_ C (fwd g) (_∘_ C (_∘_ C (fwd f) (bwd f)) (bwd g))
   ≈⟨ ∘-congʳ L (∘-congˡ L (fwd-bwd f)) ⟩
     _∘_ C (fwd g) (_∘_ C (id C) (bwd g))
@@ -57,7 +47,7 @@ bwd-fwd (Category._∘_ ISO g f) =
     _∘_ C
       (_∘_ C (bwd f) (bwd g))
       (_∘_ C (fwd g) (fwd f))
-  ≈⟨ [∘]∘[∘]→∘[[∘]∘]  ⟩
+  ≈⟨ [∘]∘[∘]→∘[[∘]∘] L ⟩
     _∘_ C (bwd f) (_∘_ C (_∘_ C (bwd g) (fwd g)) (fwd f))
   ≈⟨ ∘-congʳ L (∘-congˡ L (bwd-fwd g)) ⟩
     _∘_ C (bwd f) (_∘_ C (id C) (fwd f))

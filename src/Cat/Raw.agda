@@ -21,7 +21,7 @@ open import Relation.Binary.Bundles using (Setoid)
 import Relation.Binary.Reasoning.Setoid as SetoidR
 
 record LawfulCategory (C : Category) : Set where
-  open Category C public
+  open Category C
 
   infix 0 _≈_
 

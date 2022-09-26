@@ -5,6 +5,7 @@ module Cat.Raw where
 record Category : Set where
   infixr 0 _⇒_
   infixr 5 _∘_
+  infixr 5 _⨟_
   field
     Obj : Set
     _⇒_ : Obj → Obj → Set

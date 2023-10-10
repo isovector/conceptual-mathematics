@@ -1,0 +1,5 @@
+name: conceptual-mathematics
+depend: standard-library
+include: src
+flags:
+  --warning=noUnsupportedIndexedMatch

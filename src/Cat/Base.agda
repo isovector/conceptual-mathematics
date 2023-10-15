@@ -2,13 +2,14 @@ module Cat.Base where
 
 open import Relation.Binary
   using (Rel; IsEquivalence; Setoid; Reflexive; Transitive)
-open import Level
+open import Agda.Primitive
+  using (Level; lzero; lsuc; _⊔_)
   public
 open import Algebra.Definitions
 open import Function using (flip)
 
 
-record Category (c ℓ : Level) : Set (suc c ⊔ suc ℓ) where
+record Category (c ℓ : Level) : Set (lsuc c ⊔ lsuc ℓ) where
   infix 3 _≈_ _⇒_
   infixr 7 _∘_
   field

@@ -5,6 +5,8 @@ open Category
 import Function
 import Function.Properties
 open import Relation.Binary.PropositionalEquality
+  using (_≡_; refl; _≗_; _→-setoid_)
+  public
 open import Relation.Binary using (Setoid)
 
 SET : Category _ _

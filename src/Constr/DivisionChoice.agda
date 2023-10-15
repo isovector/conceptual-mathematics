@@ -169,6 +169,9 @@ module Example-Monoid where
   choice : (1 ∷ 2 ∷ 3 ∷ []) is-chosen-by (1 ∷ [])
   factoring choice = 2 ∷ 3 ∷ []
   chooses choice = refl
+  -- Here, it is CHOICE that agda can figure out. So it's not about
+  -- determination/choice, but instead some quirk about agda's computation
+  -- model, probably
 
 open Definition public
 

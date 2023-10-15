@@ -147,5 +147,28 @@ module Example-SET where
     -- to figure out what to do with that abstract problem space!
     -- The solution is determined by the choice of abstract problem space.
 
+module Example-Monoid where
+  open import Data.List
+  open import Data.List.Properties
+  open import Data.Nat
+  open import Cat.Monoid (++-monoid ℕ)
+  open Definition monoidCat
+  open Category monoidCat
+
+  open _is-chosen-by_
+  open _is-determined-by_
+
+  open import Relation.Binary.PropositionalEquality
+
+  -- In monoidCat, determination problems correspond to finding a prefix
+  det : (1 ∷ 2 ∷ 3 ∷ []) is-determined-by (2 ∷ 3 ∷ [])
+  factoring det = 1 ∷ []
+  determines det = refl
+
+  -- In monoidCat, choice problems correspond to finding a suffix
+  choice : (1 ∷ 2 ∷ 3 ∷ []) is-chosen-by (1 ∷ [])
+  factoring choice = 2 ∷ 3 ∷ []
+  chooses choice = refl
 
 open Definition public
+

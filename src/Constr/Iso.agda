@@ -40,18 +40,16 @@ module Definition {ℓ₁ ℓ₂ : Level} (c : Category ℓ₁ ℓ₂) where
   proj₁ (isomorphic-trans (f , iso fi fiˡ fiʳ) (g , iso gi giˡ giʳ)) = g ∘ f
   inverse (proj₂ (isomorphic-trans (f , iso fi fiˡ fiʳ) (g , iso gi giˡ giʳ))) = fi ∘ gi
   inverse∘f (proj₂ (isomorphic-trans (f , iso fi fiˡ fiʳ) (g , iso gi giˡ giʳ))) = begin
-    (fi ∘ gi) ∘ (g ∘ f)  ≈⟨ assoc fi gi (g ∘ f) ⟩
-    fi ∘ (gi ∘ (g ∘ f))  ≈⟨ cong refl (sym (assoc gi g f)) ⟩
-    fi ∘ ((gi ∘ g) ∘ f)  ≈⟨ cong refl (cong giˡ refl) ⟩
-    fi ∘ (id ∘ f)        ≈⟨ cong refl (identityˡ f) ⟩
+    (fi ∘ gi) ∘ (g ∘ f)  ≈⟨ reassoc-in ⟩
+    fi ∘ ((gi ∘ g) ∘ f)  ≈⟨ congʳ (congˡ giˡ) ⟩
+    fi ∘ (id ∘ f)        ≈⟨ congʳ (identityˡ f) ⟩
     fi ∘ f               ≈⟨ fiˡ ⟩
     id                   ∎
     where open Reasoning
   f∘inverse (proj₂ (isomorphic-trans (f , iso fi fiˡ fiʳ) (g , iso gi giˡ giʳ))) = begin
-    (g ∘ f) ∘ (fi ∘ gi)  ≈⟨ assoc g f (fi ∘ gi) ⟩
-    g ∘ (f ∘ (fi ∘ gi))  ≈⟨ cong refl (sym (assoc f fi gi)) ⟩
-    g ∘ ((f ∘ fi) ∘ gi)  ≈⟨ cong refl (cong fiʳ refl) ⟩
-    g ∘ (id ∘ gi)        ≈⟨ cong refl (identityˡ gi) ⟩
+    (g ∘ f) ∘ (fi ∘ gi)  ≈⟨ reassoc-in ⟩
+    g ∘ ((f ∘ fi) ∘ gi)  ≈⟨ congʳ (congˡ fiʳ) ⟩
+    g ∘ (id ∘ gi)        ≈⟨ congʳ (identityˡ gi) ⟩
     g ∘ gi               ≈⟨ giʳ ⟩
     id                   ∎
     where open Reasoning
@@ -65,9 +63,9 @@ module Definition {ℓ₁ ℓ₂ : Level} (c : Category ℓ₁ ℓ₂) where
   iso-unique : (g k : IsIsomorphism f) → inverse g ≈ inverse k
   iso-unique {f = f} g k = begin
     inverse g                    ≈⟨ sym (identityˡ _) ⟩
-    id ∘ inverse g               ≈⟨ cong (sym (inverse∘f k)) refl ⟩
-    (inverse k ∘ f) ∘ inverse g  ≈⟨ assoc _ _ _ ⟩
-    inverse k ∘ (f ∘ inverse g)  ≈⟨ cong refl (f∘inverse g) ⟩
+    id ∘ inverse g               ≈⟨ congˡ (sym (inverse∘f k)) ⟩
+    (inverse k ∘ f) ∘ inverse g  ≈⟨ reassoc ⟩
+    inverse k ∘ (f ∘ inverse g)  ≈⟨ congʳ (f∘inverse g) ⟩
     inverse k ∘ id               ≈⟨ identityʳ _ ⟩
     inverse k                    ∎
     where open Reasoning
@@ -82,11 +80,11 @@ module Definition {ℓ₁ ℓ₂ : Level} (c : Category ℓ₁ ℓ₂) where
   iso-injectiveˡ : IsIsomorphism f → f ∘ h ≈ f ∘ k → h ≈ k
   iso-injectiveˡ {f = f} {h = h} {k = k} f-iso fh≈fk = begin
     h                        ≈⟨ sym (identityˡ _) ⟩
-    id ∘ h                   ≈⟨ cong (sym (inverse∘f f-iso)) refl ⟩
-    (inverse f-iso ∘ f) ∘ h  ≈⟨ assoc _ _ _ ⟩
+    id ∘ h                   ≈⟨ congˡ (sym (inverse∘f f-iso)) ⟩
+    (inverse f-iso ∘ f) ∘ h  ≈⟨ reassoc ⟩
     inverse f-iso ∘ (f ∘ h)  ≈⟨ cong refl fh≈fk ⟩
-    inverse f-iso ∘ (f ∘ k)  ≈⟨ sym (assoc _ _ _) ⟩
-    (inverse f-iso ∘ f) ∘ k  ≈⟨ cong (inverse∘f f-iso) refl ⟩
+    inverse f-iso ∘ (f ∘ k)  ≈⟨ sym reassoc ⟩
+    (inverse f-iso ∘ f) ∘ k  ≈⟨ congˡ (inverse∘f f-iso) ⟩
     id ∘ k                   ≈⟨ identityˡ _ ⟩
     k                        ∎
     where open Reasoning
@@ -96,11 +94,11 @@ module Definition {ℓ₁ ℓ₂ : Level} (c : Category ℓ₁ ℓ₂) where
   iso-injectiveʳ : IsIsomorphism f → h ∘ f ≈ k ∘ f → h ≈ k
   iso-injectiveʳ {f = f} {h = h} {k = k} f-iso hf≈kf = begin
     h                        ≈⟨ sym (identityʳ _) ⟩
-    h ∘ id                   ≈⟨ cong refl (sym (f∘inverse f-iso)) ⟩
-    h ∘ (f ∘ inverse f-iso)  ≈⟨ sym (assoc _ _ _) ⟩
-    (h ∘ f) ∘ inverse f-iso  ≈⟨ cong hf≈kf refl ⟩
-    (k ∘ f) ∘ inverse f-iso  ≈⟨ assoc _ _ _ ⟩
-    k ∘ (f ∘ inverse f-iso)  ≈⟨ cong refl (f∘inverse f-iso) ⟩
+    h ∘ id                   ≈⟨ congʳ (sym (f∘inverse f-iso)) ⟩
+    h ∘ (f ∘ inverse f-iso)  ≈⟨ sym reassoc ⟩
+    (h ∘ f) ∘ inverse f-iso  ≈⟨ congˡ hf≈kf ⟩
+    (k ∘ f) ∘ inverse f-iso  ≈⟨ reassoc ⟩
+    k ∘ (f ∘ inverse f-iso)  ≈⟨ congʳ (f∘inverse f-iso) ⟩
     k ∘ id                   ≈⟨ identityʳ _ ⟩
     k                        ∎
     where open Reasoning
@@ -133,7 +131,7 @@ module Specialize where
 
 -- EXERCISE 3c
 ¬h∘f≈f∘k⊃h≈k
-  : ¬ ((c : Category (suc zero) zero)
+  : ¬ ((c : Category (lsuc lzero) lzero)
        → let open Category c in
        ∀ {X : Obj} (f h k : X ⇒ X)
        → h ∘ f ≈ f ∘ k

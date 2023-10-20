@@ -29,8 +29,8 @@ SectionFor {B = B} f = id {B} is-chosen-by f
 prop1 : SectionFor f → (y : T ⇒ B) → Σ[ x ∈ T ⇒ A ] (f ∘ x ≈ y)
 prop1 {f = f} record { factoring = s ; chooses = pr } y = s ∘ y ,
   ( begin
-    f ∘ (s ∘ y)  ≈⟨ sym (assoc _ _ _) ⟩
-    (f ∘ s) ∘ y  ≈⟨ cong pr refl ⟩
+    f ∘ (s ∘ y)  ≈⟨ sym reassoc ⟩
+    (f ∘ s) ∘ y  ≈⟨ congˡ pr ⟩
     id ∘ y       ≈⟨ identityˡ y ⟩
     y            ∎
   )
@@ -41,8 +41,8 @@ prop1 {f = f} record { factoring = s ; chooses = pr } y = s ∘ y ,
 prop1* : RetractionFor f → (g : A ⇒ T) → Σ[ t ∈ B ⇒ T ] (t ∘ f ≈ g)
 prop1* {f = f} record { factoring = r ; determines = pr } g = g ∘ r ,
   ( begin
-    (g ∘ r) ∘ f  ≈⟨ assoc _ _ _ ⟩
-    g ∘ (r ∘ f)  ≈⟨ cong refl pr ⟩
+    (g ∘ r) ∘ f  ≈⟨ reassoc ⟩
+    g ∘ (r ∘ f)  ≈⟨ congʳ pr ⟩
     g ∘ id       ≈⟨ identityʳ g ⟩
     g            ∎
   )
@@ -74,11 +74,11 @@ prop2 : RetractionFor f → IsMonomorphism f
 prop2 {f = f} record { factoring = r ; determines = pr } x₁ x₂ fx₁≈fx₂ =
   begin
   x₁            ≈⟨ sym (identityˡ _) ⟩
-  id ∘ x₁       ≈⟨ sym (cong pr refl) ⟩
-  (r ∘ f) ∘ x₁  ≈⟨ assoc _ _ _ ⟩
-  r ∘ (f ∘ x₁)  ≈⟨ cong refl fx₁≈fx₂ ⟩
-  r ∘ (f ∘ x₂)  ≈⟨ sym (assoc _ _ _) ⟩
-  (r ∘ f) ∘ x₂  ≈⟨ cong pr refl ⟩
+  id ∘ x₁       ≈⟨ sym (congˡ pr) ⟩
+  (r ∘ f) ∘ x₁  ≈⟨ reassoc ⟩
+  r ∘ (f ∘ x₁)  ≈⟨ congʳ fx₁≈fx₂ ⟩
+  r ∘ (f ∘ x₂)  ≈⟨ sym reassoc ⟩
+  (r ∘ f) ∘ x₂  ≈⟨ congˡ pr ⟩
   id ∘ x₂       ≈⟨ identityˡ _ ⟩
   x₂            ∎
   where open Reasoning
@@ -89,11 +89,11 @@ prop2* : SectionFor f → IsEpimorphism f
 prop2* {f = f} record { factoring = s ; chooses = pr } t₁ t₂ eq =
   begin
   t₁            ≈⟨ sym (identityʳ _) ⟩
-  t₁ ∘ id       ≈⟨ sym (cong refl pr) ⟩
-  t₁ ∘ (f ∘ s)  ≈⟨ sym (assoc _ _ _) ⟩
-  (t₁ ∘ f) ∘ s  ≈⟨ cong eq refl ⟩
-  (t₂ ∘ f) ∘ s  ≈⟨ assoc _ _ _ ⟩
-  t₂ ∘ (f ∘ s)  ≈⟨ cong refl pr ⟩
+  t₁ ∘ id       ≈⟨ sym (congʳ pr) ⟩
+  t₁ ∘ (f ∘ s)  ≈⟨ sym reassoc ⟩
+  (t₁ ∘ f) ∘ s  ≈⟨ congˡ eq ⟩
+  (t₂ ∘ f) ∘ s  ≈⟨ reassoc ⟩
+  t₂ ∘ (f ∘ s)  ≈⟨ congʳ pr ⟩
   t₂ ∘ id       ≈⟨ identityʳ _ ⟩
   t₂            ∎
   where open Reasoning
@@ -104,10 +104,9 @@ prop3 : RetractionFor f → RetractionFor g → RetractionFor (g ∘ f)
 factoring (prop3 (det rf pf) (det rg pg)) = rf ∘ rg
 determines (prop3 {f = f} {g = g} (det rf pf) (det rg pg)) =
   begin
-  (rf ∘ rg) ∘ (g ∘ f)  ≈⟨ assoc _ _ _ ⟩
-  rf ∘ (rg ∘ (g ∘ f))  ≈⟨ cong refl (sym (assoc _ _ _)) ⟩
-  rf ∘ ((rg ∘ g) ∘ f)  ≈⟨ cong refl (cong pg refl) ⟩
-  rf ∘ (id ∘ f)        ≈⟨ cong refl (identityˡ f) ⟩
+  (rf ∘ rg) ∘ (g ∘ f)  ≈⟨ reassoc-in ⟩
+  rf ∘ ((rg ∘ g) ∘ f)  ≈⟨ congʳ (congˡ pg) ⟩
+  rf ∘ (id ∘ f)        ≈⟨ congʳ (identityˡ f) ⟩
   rf ∘ f               ≈⟨ pf ⟩
   id                   ∎
   where open Reasoning
@@ -132,10 +131,9 @@ IsIdempotent e = e ∘ e ≈ e
 -- EXERCISE 9, page 54
 ex9 : (rf : RetractionFor f) → IsIdempotent (f ∘ rf .factoring)
 ex9 {f = f} (det g pr) = begin
-  (f ∘ g) ∘ (f ∘ g)  ≈⟨ assoc _ _ _ ⟩
-  f ∘ (g ∘ (f ∘ g))  ≈⟨ cong refl (sym (assoc _ _ _)) ⟩
-  f ∘ ((g ∘ f) ∘ g)  ≈⟨ cong refl (cong pr refl) ⟩
-  f ∘ (id ∘ g)       ≈⟨ cong refl (identityˡ _) ⟩
+  (f ∘ g) ∘ (f ∘ g)  ≈⟨ reassoc-in ⟩
+  f ∘ ((g ∘ f) ∘ g)  ≈⟨ congʳ (congˡ pr) ⟩
+  f ∘ (id ∘ g)       ≈⟨ congʳ (identityˡ _) ⟩
   f ∘ g              ∎
   where open Reasoning
 
@@ -144,9 +142,9 @@ ex9 {f = f} (det g pr) = begin
 uii : (r : RetractionFor f) → (s : SectionFor f) → s .factoring ≈ r .factoring
 uii {f = f} (det r pr) (cho s ps) = begin
   s            ≈⟨ sym (identityˡ _) ⟩
-  id ∘ s       ≈⟨ cong (sym pr) refl ⟩
-  (r ∘ f) ∘ s  ≈⟨ assoc _ _ _ ⟩
-  r ∘ (f ∘ s)  ≈⟨ cong refl ps ⟩
+  id ∘ s       ≈⟨ congˡ (sym pr) ⟩
+  (r ∘ f) ∘ s  ≈⟨ reassoc ⟩
+  r ∘ (f ∘ s)  ≈⟨ congʳ ps ⟩
   r ∘ id       ≈⟨ identityʳ _ ⟩
   r            ∎
   where open Reasoning

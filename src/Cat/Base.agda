@@ -34,3 +34,23 @@ record Category (c ℓ : Level) : Set (lsuc c ⊔ lsuc ℓ) where
       public
 
     open IsEquivalence (Setoid.isEquivalence setoid) public
+
+  congʳ : {A B C : Obj} {g h : A ⇒ B} {f : B ⇒ C} → g ≈ h → f ∘ g ≈ f ∘ h
+  congʳ = cong (equiv .IsEquivalence.refl)
+
+  congˡ : {A B C : Obj} {g h : B ⇒ C} {f : A ⇒ B} → g ≈ h → g ∘ f ≈ h ∘ f
+  congˡ x = cong x (equiv .IsEquivalence.refl)
+
+  reassoc : ∀ {A B C D : Obj} {h : C ⇒ D} {g : B ⇒ C} {f : A ⇒ B} → (h ∘ g) ∘ f ≈ h ∘ (g ∘ f)
+  reassoc {h = h} {g} {f} = assoc h g f
+
+  assoc-in : ∀ {A B C D E} → (f : D ⇒ E) → (g : C ⇒ D) → (h : B ⇒ C) → (i : A ⇒ B) → (f ∘ g) ∘ (h ∘ i) ≈ f ∘ ((g ∘ h) ∘ i)
+  assoc-in f g h i = begin
+    (f ∘ g) ∘ (h ∘ i)  ≈⟨ reassoc ⟩
+    f ∘ (g ∘ (h ∘ i))  ≈⟨ congʳ (sym reassoc) ⟩
+    f ∘ ((g ∘ h) ∘ i)  ∎
+    where open Reasoning
+
+  reassoc-in : ∀ {A B C D E} → {f : D ⇒ E} → {g : C ⇒ D} → {h : B ⇒ C} → {i : A ⇒ B} → (f ∘ g) ∘ (h ∘ i) ≈ f ∘ ((g ∘ h) ∘ i)
+  reassoc-in {f = f} {g} {h} {i} = assoc-in f g h i
+

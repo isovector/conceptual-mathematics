@@ -19,10 +19,10 @@ record Category (c ℓ : Level) : Set (lsuc c ⊔ lsuc ℓ) where
     equiv : {x y : Obj} → IsEquivalence (_≈_ {x} {y})
     id : Reflexive _⇒_
     _∘_ : Transitive (flip _⇒_)
-    ∘-identityˡ : ∀ {X Y} (f : X ⇒ Y) → id ∘ f ≈ f
-    ∘-identityʳ : ∀ {X Y} (f : X ⇒ Y) → f ∘ id ≈ f
-    ∘-assoc : ∀ {A B C D : Obj} (h : C ⇒ D) (g : B ⇒ C) (f : A ⇒ B) → (h ∘ g) ∘ f ≈ h ∘ (g ∘ f)
-    ∘-cong : ∀ {X Y Z} {f f′ : X ⇒ Y} {g g′ : Y ⇒ Z} → g ≈ g′ → f ≈ f′ → g ∘ f ≈ g′ ∘ f′
+    identityˡ : ∀ {X Y} (f : X ⇒ Y) → id ∘ f ≈ f
+    identityʳ : ∀ {X Y} (f : X ⇒ Y) → f ∘ id ≈ f
+    assoc : ∀ {A B C D : Obj} (h : C ⇒ D) (g : B ⇒ C) (f : A ⇒ B) → (h ∘ g) ∘ f ≈ h ∘ (g ∘ f)
+    cong : ∀ {X Y Z} {f f′ : X ⇒ Y} {g g′ : Y ⇒ Z} → g ≈ g′ → f ≈ f′ → g ∘ f ≈ g′ ∘ f′
 
   module Reasoning {x y : Obj} where
     setoid : Setoid ℓ _
@@ -34,4 +34,3 @@ record Category (c ℓ : Level) : Set (lsuc c ⊔ lsuc ℓ) where
       public
 
     open IsEquivalence (Setoid.isEquivalence setoid) public
-

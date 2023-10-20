@@ -16,10 +16,10 @@ _≈_ SET = _≗_
 equiv SET = (_ →-setoid _) .Setoid.isEquivalence
 id SET = Function.id
 _∘_ SET g f = g Function.∘ f
-∘-identityˡ SET f x = refl
-∘-identityʳ SET f x = refl
-∘-assoc SET h g f x = refl
-∘-cong SET {_} {f} {g} {h} {i} f=g h=i x
+identityˡ SET f x = refl
+identityʳ SET f x = refl
+assoc SET h g f x = refl
+cong SET {_} {f} {g} {h} {i} f=g h=i x
   rewrite h=i x
   rewrite f=g (i x)
     = refl

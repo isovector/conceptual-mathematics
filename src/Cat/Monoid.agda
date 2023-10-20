@@ -14,7 +14,7 @@ module Cat.Monoid {c : Level} (M : Monoid c c) where
   equiv monoidCat = isEquivalence
   id monoidCat = ε
   _∘_ monoidCat = _∙_
-  ∘-identityˡ monoidCat = identityˡ
-  ∘-identityʳ monoidCat = identityʳ
-  ∘-assoc monoidCat = assoc
-  ∘-cong monoidCat = ∙-cong
+  Category.identityˡ monoidCat = Monoid.identityˡ M
+  Category.identityʳ monoidCat = Monoid.identityʳ M
+  Category.assoc monoidCat = Monoid.assoc M
+  cong monoidCat = ∙-cong

@@ -50,23 +50,23 @@ prop1* {f = f} record { factoring = r ; determines = pr } g = g ∘ r ,
 
 
 -- DEFINITION, Page 52
-_IsInjectiveForMapsFrom_ : A ⇒ B → Obj → Set ℓ₂
-_IsInjectiveForMapsFrom_ {A = A} f T = (t₁ t₂ : T ⇒ A) → f ∘ t₁ ≈ f ∘ t₂ → t₁ ≈ t₂
+_is-injective-for-maps-from_ : A ⇒ B → Obj → Set ℓ₂
+_is-injective-for-maps-from_ {A = A} f T = (t₁ t₂ : T ⇒ A) → f ∘ t₁ ≈ f ∘ t₂ → t₁ ≈ t₂
 
 
 -- DEFINITION, Page 52
 IsMonomorphism : A ⇒ B → Set (ℓ₁ ⊔ ℓ₂)
-IsMonomorphism f = {T : Obj} → f IsInjectiveForMapsFrom T
+IsMonomorphism f = {T : Obj} → f is-injective-for-maps-from T
 
 
 -- DEFINITION, Page 52
-_IsSurjectiveForMapsTo_ : A ⇒ B → Obj → Set ℓ₂
-_IsSurjectiveForMapsTo_ {B = B} f T = (t₁ t₂ : B ⇒ T) → t₁ ∘ f ≈ t₂ ∘ f → t₁ ≈ t₂
+_is-surjective-for-maps-to_ : A ⇒ B → Obj → Set ℓ₂
+_is-surjective-for-maps-to_ {B = B} f T = (t₁ t₂ : B ⇒ T) → t₁ ∘ f ≈ t₂ ∘ f → t₁ ≈ t₂
 
 
 -- DEFINITION, Page 52
 IsEpimorphism : A ⇒ B → Set (ℓ₁ ⊔ ℓ₂)
-IsEpimorphism f = {T : Obj} → f IsSurjectiveForMapsTo T
+IsEpimorphism f = {T : Obj} → f is-surjective-for-maps-to T
 
 
 -- PROPOSITION 2, page 52

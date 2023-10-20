@@ -41,6 +41,20 @@ record Category (c ℓ : Level) : Set (lsuc c ⊔ lsuc ℓ) where
   congˡ : {A B C : Obj} {g h : B ⇒ C} {f : A ⇒ B} → g ≈ h → g ∘ f ≈ h ∘ f
   congˡ x = cong x (equiv .IsEquivalence.refl)
 
+  id-elimˡ : {A B : Obj} {f : A ⇒ B} {g : B ⇒ B} → g ≈ id → g ∘ f ≈ f
+  id-elimˡ {f = f} {g} eq = begin
+    g ∘ f   ≈⟨ congˡ eq ⟩
+    id ∘ f  ≈⟨ identityˡ _ ⟩
+    f       ∎
+    where open Reasoning
+
+  id-elimʳ : {A B : Obj} {f : A ⇒ A} {g : A ⇒ B} → f ≈ id → g ∘ f ≈ g
+  id-elimʳ {f = f} {g} eq = begin
+    g ∘ f   ≈⟨ congʳ eq ⟩
+    g ∘ id  ≈⟨ identityʳ _ ⟩
+    g       ∎
+    where open Reasoning
+
   reassoc : ∀ {A B C D : Obj} {h : C ⇒ D} {g : B ⇒ C} {f : A ⇒ B} → (h ∘ g) ∘ f ≈ h ∘ (g ∘ f)
   reassoc {h = h} {g} {f} = assoc h g f
 

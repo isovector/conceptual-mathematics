@@ -30,8 +30,7 @@ prop1 : SectionFor f → (y : T ⇒ B) → Σ[ x ∈ T ⇒ A ] (f ∘ x ≈ y)
 prop1 {f = f} record { factoring = s ; chooses = pr } y = s ∘ y ,
   ( begin
     f ∘ (s ∘ y)  ≈⟨ sym reassoc ⟩
-    (f ∘ s) ∘ y  ≈⟨ congˡ pr ⟩
-    id ∘ y       ≈⟨ identityˡ y ⟩
+    (f ∘ s) ∘ y  ≈⟨ id-elimˡ pr ⟩
     y            ∎
   )
   where open Reasoning
@@ -42,8 +41,7 @@ prop1* : RetractionFor f → (g : A ⇒ T) → Σ[ t ∈ B ⇒ T ] (t ∘ f ≈ 
 prop1* {f = f} record { factoring = r ; determines = pr } g = g ∘ r ,
   ( begin
     (g ∘ r) ∘ f  ≈⟨ reassoc ⟩
-    g ∘ (r ∘ f)  ≈⟨ congʳ pr ⟩
-    g ∘ id       ≈⟨ identityʳ g ⟩
+    g ∘ (r ∘ f)  ≈⟨ id-elimʳ pr ⟩
     g            ∎
   )
   where open Reasoning
@@ -73,13 +71,11 @@ IsEpimorphism f = {T : Obj} → f is-surjective-for-maps-to T
 prop2 : RetractionFor f → IsMonomorphism f
 prop2 {f = f} record { factoring = r ; determines = pr } x₁ x₂ fx₁≈fx₂ =
   begin
-  x₁            ≈⟨ sym (identityˡ _) ⟩
-  id ∘ x₁       ≈⟨ sym (congˡ pr) ⟩
+  x₁            ≈⟨ sym (id-elimˡ pr) ⟩
   (r ∘ f) ∘ x₁  ≈⟨ reassoc ⟩
   r ∘ (f ∘ x₁)  ≈⟨ congʳ fx₁≈fx₂ ⟩
   r ∘ (f ∘ x₂)  ≈⟨ sym reassoc ⟩
-  (r ∘ f) ∘ x₂  ≈⟨ congˡ pr ⟩
-  id ∘ x₂       ≈⟨ identityˡ _ ⟩
+  (r ∘ f) ∘ x₂  ≈⟨ id-elimˡ pr ⟩
   x₂            ∎
   where open Reasoning
 
@@ -88,13 +84,11 @@ prop2 {f = f} record { factoring = r ; determines = pr } x₁ x₂ fx₁≈fx₂
 prop2* : SectionFor f → IsEpimorphism f
 prop2* {f = f} record { factoring = s ; chooses = pr } t₁ t₂ eq =
   begin
-  t₁            ≈⟨ sym (identityʳ _) ⟩
-  t₁ ∘ id       ≈⟨ sym (congʳ pr) ⟩
+  t₁            ≈⟨ sym (id-elimʳ pr) ⟩
   t₁ ∘ (f ∘ s)  ≈⟨ sym reassoc ⟩
   (t₁ ∘ f) ∘ s  ≈⟨ congˡ eq ⟩
   (t₂ ∘ f) ∘ s  ≈⟨ reassoc ⟩
-  t₂ ∘ (f ∘ s)  ≈⟨ congʳ pr ⟩
-  t₂ ∘ id       ≈⟨ identityʳ _ ⟩
+  t₂ ∘ (f ∘ s)  ≈⟨ id-elimʳ pr ⟩
   t₂            ∎
   where open Reasoning
 
@@ -105,8 +99,7 @@ factoring (prop3 (det rf pf) (det rg pg)) = rf ∘ rg
 determines (prop3 {f = f} {g = g} (det rf pf) (det rg pg)) =
   begin
   (rf ∘ rg) ∘ (g ∘ f)  ≈⟨ reassoc-in ⟩
-  rf ∘ ((rg ∘ g) ∘ f)  ≈⟨ congʳ (congˡ pg) ⟩
-  rf ∘ (id ∘ f)        ≈⟨ congʳ (identityˡ f) ⟩
+  rf ∘ ((rg ∘ g) ∘ f)  ≈⟨ congʳ (id-elimˡ pg) ⟩
   rf ∘ f               ≈⟨ pf ⟩
   id                   ∎
   where open Reasoning
@@ -132,8 +125,7 @@ IsIdempotent e = e ∘ e ≈ e
 ex9 : (rf : RetractionFor f) → IsIdempotent (f ∘ rf .factoring)
 ex9 {f = f} (det g pr) = begin
   (f ∘ g) ∘ (f ∘ g)  ≈⟨ reassoc-in ⟩
-  f ∘ ((g ∘ f) ∘ g)  ≈⟨ congʳ (congˡ pr) ⟩
-  f ∘ (id ∘ g)       ≈⟨ congʳ (identityˡ _) ⟩
+  f ∘ ((g ∘ f) ∘ g)  ≈⟨ congʳ (id-elimˡ pr) ⟩
   f ∘ g              ∎
   where open Reasoning
 
@@ -141,11 +133,9 @@ ex9 {f = f} (det g pr) = begin
 -- THEOREM: UNIQUENESS OF INVERSES, page 54
 uii : (r : RetractionFor f) → (s : SectionFor f) → s .factoring ≈ r .factoring
 uii {f = f} (det r pr) (cho s ps) = begin
-  s            ≈⟨ sym (identityˡ _) ⟩
-  id ∘ s       ≈⟨ congˡ (sym pr) ⟩
+  s            ≈⟨ sym (id-elimˡ pr) ⟩
   (r ∘ f) ∘ s  ≈⟨ reassoc ⟩
-  r ∘ (f ∘ s)  ≈⟨ congʳ ps ⟩
-  r ∘ id       ≈⟨ identityʳ _ ⟩
+  r ∘ (f ∘ s)  ≈⟨ id-elimʳ ps ⟩
   r            ∎
   where open Reasoning
 

@@ -1,8 +1,8 @@
 {-# OPTIONS --allow-unsolved-metas #-}
 
-module Constr.DivisionChoice where
-
 open import Cat.Base
+
+module Constr.DivisionChoice {ℓ₁ ℓ₂ : Level} (the-cat : Category ℓ₁ ℓ₂) where
 
 module Definition {ℓ₁ ℓ₂ : Level} (c : Category ℓ₁ ℓ₂) where
   open import Relation.Binary
@@ -15,6 +15,7 @@ module Definition {ℓ₁ ℓ₂ : Level} (c : Category ℓ₁ ℓ₂) where
   -- DEFINITION, page 45
   -- alsa called an "extension" problem
   record _is-determined-by_ (h : A ⇒ C) (f : A ⇒ B) : Set ℓ₂ where
+    constructor det
     field
       factoring : B ⇒ C
       determines : factoring ∘ f ≈ h
@@ -23,6 +24,7 @@ module Definition {ℓ₁ ℓ₂ : Level} (c : Category ℓ₁ ℓ₂) where
   -- DEFINITION, page 45
   -- alsa called a "lifting" problem
   record _is-chosen-by_ (h : A ⇒ C) (g : B ⇒ C) : Set ℓ₂ where
+    constructor cho
     field
       factoring : A ⇒ B
       chooses : g ∘ factoring ≈ h
@@ -161,9 +163,9 @@ module Example-Monoid where
   open import Relation.Binary.PropositionalEquality
 
   -- In monoidCat, determination problems correspond to finding a prefix
-  det : (1 ∷ 2 ∷ 3 ∷ []) is-determined-by (2 ∷ 3 ∷ [])
-  factoring det = 1 ∷ []
-  determines det = refl
+  deter : (1 ∷ 2 ∷ 3 ∷ []) is-determined-by (2 ∷ 3 ∷ [])
+  factoring deter = 1 ∷ []
+  determines deter = refl
 
   -- In monoidCat, choice problems correspond to finding a suffix
   choice : (1 ∷ 2 ∷ 3 ∷ []) is-chosen-by (1 ∷ [])
@@ -173,5 +175,5 @@ module Example-Monoid where
   -- determination/choice, but instead some quirk about agda's computation
   -- model, probably
 
-open Definition public
+open Definition the-cat public
 

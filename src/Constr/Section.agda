@@ -25,7 +25,36 @@ SectionFor : A ⇒ B → Set ℓ₂
 SectionFor {B = B} f = id {B} is-chosen-by f
 
 
+-- DEFINITION, Page 52
+_is-injective-for-maps-from_ : A ⇒ B → Obj → Set ℓ₂
+_is-injective-for-maps-from_ {A = A} f T
+  = (t₁ t₂ : T ⇒ A) → f ∘ t₁ ≈ f ∘ t₂ → t₁ ≈ t₂
+
+
+-- DEFINITION, Page 52
+IsMonomorphism : A ⇒ B → Set (ℓ₁ ⊔ ℓ₂)
+IsMonomorphism {A = A} f = {T : Obj} → f is-injective-for-maps-from T
+
+
+-- DEFINITION, Page 52
+_is-surjective-for-maps-from_ : A ⇒ B → Obj → Set ℓ₂
+_is-surjective-for-maps-from_ {A = A} {B = B} f T
+  = (y : T ⇒ B) → Σ[ x ∈ T ⇒ A ] (f ∘ x ≈ y)
+
+
+-- DEFINITION, Page 52
+IsEpimorphism : A ⇒ B → Set (ℓ₁ ⊔ ℓ₂)
+IsEpimorphism {B = B} f
+  = ∀ {T : Obj} → (t₁ t₂ : B ⇒ T) → t₁ ∘ f ≈ t₂ ∘ f → t₁ ≈ t₂
+
+
 -- PROPOSITION 1, page 51
+-- This is the property of surjectivity of `f`; for any particular result `y` we
+-- want, we can find some other map `x` such that precomposing it gives us us
+-- the thing we want.
+--
+-- Why is this surjectivity? Because if the function weren't surjective, `y`
+-- could map somewhere in `B` that we can't get to from `f`.
 prop1 : SectionFor f → (y : T ⇒ B) → Σ[ x ∈ T ⇒ A ] (f ∘ x ≈ y)
 prop1 {f = f} record { factoring = s ; chooses = pr } y = s ∘ y ,
   ( begin
@@ -45,26 +74,6 @@ prop1* {f = f} record { factoring = r ; determines = pr } g = g ∘ r ,
     g            ∎
   )
   where open Reasoning
-
-
--- DEFINITION, Page 52
-_is-injective-for-maps-from_ : A ⇒ B → Obj → Set ℓ₂
-_is-injective-for-maps-from_ {A = A} f T = (t₁ t₂ : T ⇒ A) → f ∘ t₁ ≈ f ∘ t₂ → t₁ ≈ t₂
-
-
--- DEFINITION, Page 52
-IsMonomorphism : A ⇒ B → Set (ℓ₁ ⊔ ℓ₂)
-IsMonomorphism f = {T : Obj} → f is-injective-for-maps-from T
-
-
--- DEFINITION, Page 52
-_is-surjective-for-maps-to_ : A ⇒ B → Obj → Set ℓ₂
-_is-surjective-for-maps-to_ {B = B} f T = (t₁ t₂ : B ⇒ T) → t₁ ∘ f ≈ t₂ ∘ f → t₁ ≈ t₂
-
-
--- DEFINITION, Page 52
-IsEpimorphism : A ⇒ B → Set (ℓ₁ ⊔ ℓ₂)
-IsEpimorphism f = {T : Obj} → f is-surjective-for-maps-to T
 
 
 -- PROPOSITION 2, page 52
@@ -138,4 +147,23 @@ uii {f = f} (det r pr) (cho s ps) = begin
   r ∘ (f ∘ s)  ≈⟨ id-elimʳ ps ⟩
   r            ∎
   where open Reasoning
+
+-- QUESTIONS
+--
+-- 1) The definitions given, `_is-surjective-for-maps-from_` is NOT dual to
+--    `_is-injective-for-maps-from_`. Because `IsMonomorphism` is forall T,
+--    is-injective..., but the converse is not true for `IsEpimorphism`.
+--
+--    Wrong definition? Only true in sets? What's going on here?
+
+-- NOTES
+--
+-- r ∘ s = 1ₐ; A must be smaller than B
+-- the section goes to the bigger domain
+-- the retraction comes back
+--    > section is a CHOICE OF REPRESENTATIVE of the smaller set
+--    > while the retraction maps back to the smaller set
+--
+--    * retraction : person -> riding
+--    * section    : riding -> person
 

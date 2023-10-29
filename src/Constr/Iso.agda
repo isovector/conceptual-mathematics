@@ -1,8 +1,8 @@
 open import Cat.Base
 
-module Constr.Iso where
+module Constr.Iso {ℓ₁ ℓ₂ : Level} (c : Category ℓ₁ ℓ₂) where
 
-module Definition {ℓ₁ ℓ₂ : Level} (c : Category ℓ₁ ℓ₂) where
+private module Definition {ℓ₁ ℓ₂ : Level} (c : Category ℓ₁ ℓ₂) where
   open import Relation.Binary
     using (Rel; Reflexive; Symmetric; Transitive)
   open Category c
@@ -14,7 +14,7 @@ module Definition {ℓ₁ ℓ₂ : Level} (c : Category ℓ₁ ℓ₂) where
       inverse : B ⇒ A
       inverse∘f : inverse ∘ f ≈ id
       f∘inverse : f ∘ inverse ≈ id
-  open IsIsomorphism
+  open IsIsomorphism public
 
   open import Data.Product
 
@@ -24,35 +24,40 @@ module Definition {ℓ₁ ℓ₂ : Level} (c : Category ℓ₁ ℓ₂) where
 
 
   -- EXERCISE 1r
-  isomorphic-refl : Reflexive Isomorphic
-  proj₁ isomorphic-refl = id
-  proj₂ isomorphic-refl = iso id (identityˡ id) (identityˡ id)
+  iso-refl : Reflexive Isomorphic
+  proj₁ iso-refl = id
+  proj₂ iso-refl = iso id (identityˡ id) (identityˡ id)
 
 
   -- EXERCISE 1s
-  isomorphic-sym : Symmetric Isomorphic
-  isomorphic-sym (f , iso inverse inverse∘f f∘inverse)
+  iso-sym : Symmetric Isomorphic
+  iso-sym (f , iso inverse inverse∘f f∘inverse)
     = inverse , iso f f∘inverse inverse∘f
 
 
   -- EXERCISE 1t
-  isomorphic-trans : Transitive Isomorphic
-  proj₁ (isomorphic-trans (f , iso fi fiˡ fiʳ) (g , iso gi giˡ giʳ)) = g ∘ f
-  inverse (proj₂ (isomorphic-trans (f , iso fi fiˡ fiʳ) (g , iso gi giˡ giʳ))) = fi ∘ gi
-  inverse∘f (proj₂ (isomorphic-trans (f , iso fi fiˡ fiʳ) (g , iso gi giˡ giʳ))) = begin
+  iso-trans′ : Transitive Isomorphic
+  proj₁ (iso-trans′ (f , iso fi fiˡ fiʳ) (g , iso gi giˡ giʳ)) = g ∘ f
+  inverse (proj₂ (iso-trans′ (f , iso fi fiˡ fiʳ) (g , iso gi giˡ giʳ))) = fi ∘ gi
+  inverse∘f (proj₂ (iso-trans′ (f , iso fi fiˡ fiʳ) (g , iso gi giˡ giʳ))) = begin
     (fi ∘ gi) ∘ (g ∘ f)  ≈⟨ reassoc-in ⟩
     fi ∘ ((gi ∘ g) ∘ f)  ≈⟨ congʳ (congˡ giˡ) ⟩
     fi ∘ (id ∘ f)        ≈⟨ congʳ (identityˡ f) ⟩
     fi ∘ f               ≈⟨ fiˡ ⟩
     id                   ∎
     where open Reasoning
-  f∘inverse (proj₂ (isomorphic-trans (f , iso fi fiˡ fiʳ) (g , iso gi giˡ giʳ))) = begin
+  f∘inverse (proj₂ (iso-trans′ (f , iso fi fiˡ fiʳ) (g , iso gi giˡ giʳ))) = begin
     (g ∘ f) ∘ (fi ∘ gi)  ≈⟨ reassoc-in ⟩
     g ∘ ((f ∘ fi) ∘ gi)  ≈⟨ congʳ (congˡ fiʳ) ⟩
     g ∘ (id ∘ gi)        ≈⟨ congʳ (identityˡ gi) ⟩
     g ∘ gi               ≈⟨ giʳ ⟩
     id                   ∎
     where open Reasoning
+
+  open import Function using (flip)
+
+  iso-trans : {A B C : Obj} → (y : Σ (B ⇒ C) IsIsomorphism) (x : Σ (A ⇒ B) IsIsomorphism) → Σ (A ⇒ C) IsIsomorphism
+  iso-trans = flip iso-trans′
 
   private variable
     A B : Obj
@@ -107,7 +112,7 @@ module Definition {ℓ₁ ℓ₂ : Level} (c : Category ℓ₁ ℓ₂) where
 open import Relation.Nullary
 open import Data.Bool
 open import Data.Bool.Properties
-open import Cat.SET
+open import Cat.SET lzero
 open import Relation.Binary.PropositionalEquality as ≡
   using (_≢_; module ≡-Reasoning)
 
@@ -168,5 +173,5 @@ module Specialize where
 --    y - 1 = 1/x
 --    x = 1/(y - 1)
 
-open Definition public
+open Definition c public
 

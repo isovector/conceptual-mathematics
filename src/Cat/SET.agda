@@ -1,6 +1,7 @@
-module Cat.SET where
-
 open import Cat.Base
+
+module Cat.SET (ℓ : Level) where
+
 open Category
 import Function
 import Function.Properties
@@ -10,7 +11,7 @@ open import Relation.Binary.PropositionalEquality
 open import Relation.Binary using (Setoid)
 
 SET : Category _ _
-Obj SET = Set
+Obj SET = Set ℓ
 _⇒_ SET x y = x → y
 _≈_ SET = _≗_
 equiv SET = (_ →-setoid _) .Setoid.isEquivalence

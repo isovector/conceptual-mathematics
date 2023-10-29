@@ -4,13 +4,15 @@ open import Cat.Base
 
 module Constr.DivisionChoice {ℓ₁ ℓ₂ : Level} (the-cat : Category ℓ₁ ℓ₂) where
 
-module Definition {ℓ₁ ℓ₂ : Level} (c : Category ℓ₁ ℓ₂) where
+private module Definition {ℓ₁ ℓ₂ : Level} (c : Category ℓ₁ ℓ₂) where
   open import Relation.Binary
     using (Rel; Reflexive; Symmetric; Transitive)
   open Category c
 
   private variable
     A B C : Obj
+
+
 
   -- DEFINITION, page 45
   -- alsa called an "extension" problem
@@ -31,7 +33,7 @@ module Definition {ℓ₁ ℓ₂ : Level} (c : Category ℓ₁ ℓ₂) where
 
 
 module Example-SET where
-  open import Cat.SET
+  open import Cat.SET lzero
   open Definition SET
   open Category SET
 

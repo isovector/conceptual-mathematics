@@ -59,6 +59,9 @@ private module Definition {ℓ₁ ℓ₂ : Level} (c : Category ℓ₁ ℓ₂) w
   iso-trans : {A B C : Obj} → (y : Σ (B ⇒ C) IsIsomorphism) (x : Σ (A ⇒ B) IsIsomorphism) → Σ (A ⇒ C) IsIsomorphism
   iso-trans = flip iso-trans′
 
+  _≅∘_ : {A B C : Obj} → Σ (B ⇒ C) IsIsomorphism → Σ (A ⇒ B) IsIsomorphism → Σ (A ⇒ C) IsIsomorphism
+  _≅∘_ = iso-trans
+
   private variable
     A B : Obj
     f g h k : A ⇒ B
